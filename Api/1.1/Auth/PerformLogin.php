@@ -6,15 +6,23 @@
  * Time: 3:20 PM
  */
 
-//Include DB
+//Include DB Setup
 include '../../../Database/dbconfig.php';
 
-//Connect to DB
-$conn = new mysqli($servername, $username, $password);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+//Parameters
+$username = isset($_GET['username']) ? $_GET['username'] : '*';
+$password = isset($_GET['password']) ? $_GET['password'] : '*';
+
+
+//Call PerformLogin(username, password)
+$result = mysqli_query($conn, "CALL PerformLogin('$username', '$password')") or
+die("Error:" . mysqli_error($conn));
+
+//loop the result set
+while ($row = mysqli_fetch_array($result))
+{
+    $user = (object)$row;
+    print_r($user);
 }
-echo "Connected successfully";
 ?>
