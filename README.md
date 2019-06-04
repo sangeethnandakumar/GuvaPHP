@@ -56,3 +56,9 @@ Resolves list of modules available for specific app
 > ResolveModules.php?appid=123456&stash=H4WVCUYYN5HNJIMC
 
 Success -> Returns List Of Activated Modules | Fail -> Returns Returns Error Object
+
+### ResolveModule.php
+Resolves dynamic impression data to load module in a built in browser
+> ResolveModule.php?appid=123456&stash=H4WVCUYYN5HNJIMC
+
+Success -> Returns DID browser parameters | Fail -> Returns Returns Error Object
