@@ -11,29 +11,28 @@ include '../../../Database/dbconfig.php';
 include '../ResponceObject.php';
 
 //Parameters
-$username = isset($_GET['username']) ? $_GET['username'] : '*';
-$password = isset($_GET['password']) ? $_GET['password'] : '*';
+$stash = isset($_GET['stash']) ? $_GET['stash'] : '*';
 
 
 //Call PerformLogin(username, password)
-$result = mysqli_query($conn, "CALL PerformLogin('$username', '$password')") or die("Error:" . mysqli_error($conn));
+$result = mysqli_query($conn, "CALL ResolveUser('$stash')") or die("Error:" . mysqli_error($conn));
 
 
 //Output Result Set
-while ($row = mysqli_fetch_array($result))
+while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
 {
-    $responce = $row[0];
-    if (!startsWith($responce, 'Error:'))
+    $responce = reset($row);
+    if (!startsWith($responce, '#'))
     {
         $data = new stdClass();
-        $data->stash = $responce;
-        echo ComposeResponce('Authentication Successful', 200, null, $data);
+        $data = (object)$row;
+        echo ComposeResponce('Resolution Successful', 200, null, $data);
     }
     else
     {
         $conn->next_result();
-        $data = ResolveError(ltrim($responce,"Error:"));
-        echo ComposeResponce('Authentication Failure', 400, $data, null);
+        $data = ResolveError(ltrim($responce,"#"));
+        echo ComposeResponce('Resolution Failure', 400, $data, null);
     }
 }
 

@@ -22,8 +22,8 @@ $result = mysqli_query($conn, "CALL PerformLogin('$username', '$password')") or 
 //Output Result Set
 while ($row = mysqli_fetch_array($result))
 {
-    $responce = $row[0];
-    if (!startsWith($responce, 'Error:'))
+    $responce = reset($row);
+    if (!startsWith($responce, '#'))
     {
         $data = new stdClass();
         $data->stash = $responce;
@@ -32,7 +32,7 @@ while ($row = mysqli_fetch_array($result))
     else
     {
         $conn->next_result();
-        $data = ResolveError(ltrim($responce,"Error:"));
+        $data = ResolveError(ltrim($responce,"#"));
         echo ComposeResponce('Authentication Failure', 400, $data, null);
     }
 }
