@@ -15,8 +15,9 @@ $stash = isset($_GET['stash']) ? $_GET['stash'] : '*';
 
 
 //Call PerformLogin(username, password)
-$result = mysqli_query($conn, "CALL ResolveUser('$stash')") or die("Error:" . mysqli_error($conn));
+$result = mysqli_query($conn, "CALL ResolveLogRecords('$stash')") or die("Error:" . mysqli_error($conn));
 
+$logs = array();
 
 //Output Result Set
 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
@@ -25,18 +26,20 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
     if (!startsWith($responce, '#'))
     {
         $data = new stdClass();
-        $data = (object)$row;
-        echo ComposeResponce('Resolution Successful', 200, null, $data);
+        $data=(object)$row;
+        $logs[] = $data;
     }
     else
     {
         $conn->next_result();
         $data = ResolveError(ltrim($responce,"#"));
-        echo ComposeResponce('Resolution Failure', 400, $data, null);
+        echo ComposeResponce('Log Request Failure', 400, $data, null);
         die();
     }
 }
 
+
+echo ComposeResponce('Log Request Successful', 200, null, $logs);
 
 
 ?>
