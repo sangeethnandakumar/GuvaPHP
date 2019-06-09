@@ -10,12 +10,9 @@
 include '../../../Database/dbconfig.php';
 include '../ResponceObject.php';
 
-//Parameters
-$stash = isset($_GET['stash']) ? $_GET['stash'] : '*';
-
 
 //Call PerformLogin(username, password)
-$result = mysqli_query($conn, "CALL ResolveAppLibrary('$stash')") or die("Error:" . mysqli_error($conn));
+$result = mysqli_query($conn, "CALL ResolveModuleStore()") or die("Error:" . mysqli_error($conn));
 
 $apps = array();
 
@@ -33,13 +30,13 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
     {
         $conn->next_result();
         $data = ResolveError(ltrim($responce,"#"));
-        echo ComposeResponce('App Library Request Failure', 400, $data, null);
+        echo ComposeResponce('Module Request Failure', 400, $data, null);
         die();
     }
 }
 
 
-echo ComposeResponce('App Library Request Successful', 200, null, $apps);
+echo ComposeResponce('Module Request Successful', 200, null, $apps);
 
 
 ?>
