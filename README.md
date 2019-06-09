@@ -16,6 +16,11 @@ Official Guva analetic library PHP backend
 
 > ResolveSubscriptionModules
 
+## SUBSCRIPTIONS
+> ResolveSubscription
+
+> ResolveSubscriptionStore
+
 ## LOGS
 > ResolveLogRecords
 
